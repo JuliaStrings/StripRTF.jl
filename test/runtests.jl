@@ -24,6 +24,7 @@ end
                 "issue_28",
                 "issue_29_bad",
                 "issue_29_good",
+                "issue_37",
                 "issue_38",
                 "line_break_textedit_mac",
                 "mac_textedit_hyperlink",
