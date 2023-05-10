@@ -4,8 +4,12 @@ using Test
 function testfile_matches(f::AbstractString)
     rtf = read(joinpath(@__DIR__, "rtf", f * ".rtf"), String)
     txt = read(joinpath(@__DIR__, "text", f * ".txt"), String)
+    stripped = striprtf(rtf)
     @info "TEST FILE \"$f\""
-    return striprtf(rtf) == txt
+    if length(txt) < 40 && stripped != txt
+        @warn " -- EXPECTED \"$(escape_string(txt))\" BUT GOT \"$(escape_string(stripped))\""
+    end
+    return stripped == txt
 end
 
 @testset "test files" begin
