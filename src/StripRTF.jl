@@ -96,7 +96,7 @@ striprtf(out::IO, text::AbstractString) = _striprtf(out, String(text))
 striprtf(text::AbstractString) = String(take!(striprtf(IOBuffer(), text)))
 
 function _striprtf(out::IO, text::String)
-    text = _replace_hyperlinks(text)
+    text = _replace_hyperlinks(replace(text, "\r\n" => "\n"))
     stack = Tuple{Int,Bool}[]
     ignorable = false       # Whether this group (and all inside it) are "ignorable".
     ucskip = 1              # Number of ASCII characters to skip after a unicode character.

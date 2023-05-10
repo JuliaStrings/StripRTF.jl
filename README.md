@@ -1,5 +1,7 @@
 # StripRTF
 
+[![CI](https://github.com/JuliaStrings/StripRTF.jl/workflows/CI/badge.svg)](https://github.com/JuliaStrings/StripRTF.jl/actions?query=workflow%3ACI)
+
 The `StripRTF` module exports a single function, [`striprtf(text)`](@ref), that
 strips all formatting from a string in [Rich Text Format (RTF)](https://en.wikipedia.org/wiki/Rich_Text_Format)
 to yield "plain text".

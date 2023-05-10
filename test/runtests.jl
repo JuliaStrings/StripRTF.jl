@@ -1,11 +1,16 @@
 using StripRTF
 using Test
 
-function testfile_matches(f::AbstractString)
-    rtf = read(joinpath(@__DIR__, "rtf", f * ".rtf"), String)
-    txt = read(joinpath(@__DIR__, "text", f * ".txt"), String)
+function do_testfile(f::AbstractString)
     @info "TEST FILE \"$f\""
-    return striprtf(rtf) == txt
+    rtf = read(joinpath(@__DIR__, "rtf", f * ".rtf"), String)
+    txt = replace(read(joinpath(@__DIR__, "text", f * ".txt"), String), "\r\n" => "\n")
+    if length(txt) < 100
+        @test striprtf(rtf) == txt
+    else
+        ok = striprtf(rtf) == txt
+        @test ok # omit long output on failures
+    end
 end
 
 @testset "test files" begin
@@ -24,6 +29,7 @@ end
                 "issue_28",
                 "issue_29_bad",
                 "issue_29_good",
+                "issue_37",
                 "issue_38",
                 "line_break_textedit_mac",
                 "mac_textedit_hyperlink",
@@ -33,6 +39,6 @@ end
                 "simple_table",
                 "test_line_breaks_google_docs",
                 "unicode" ]
-        @test testfile_matches(f)
+        do_testfile(f)
     end
 end
