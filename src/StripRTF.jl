@@ -79,7 +79,7 @@ const specialchars = Dict{String,String}([
 
 const PATTERN = r"\\([a-z]{1,32})(-?\d{1,10})?[ ]?|\\'([0-9a-f]{2})|\\([^a-z])|([{}])|[\r\n]+|(.)"i
 
-const HYPERLINKS = r"(\{\\field\{\s*\\\*\\fldinst\{.*?HYPERLINK\s(\".*?\")\}{2}\s*\{.*?\s+(.*?)\}{2}\}?)"i
+const HYPERLINKS = r"(\{\\field\{\s*\\\*\\fldinst\{.*?HYPERLINK\s(\".*?\")\}{2}\s*\{.*?\s+(.*?)\}{2,3})"i
 
 _replace_hyperlinks(text::String) = replace(text, HYPERLINKS => s"\1(\2)")
 
