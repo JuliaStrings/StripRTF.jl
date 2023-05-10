@@ -4,7 +4,7 @@ using Test
 function do_testfile(f::AbstractString)
     @info "TEST FILE \"$f\""
     rtf = read(joinpath(@__DIR__, "rtf", f * ".rtf"), String)
-    txt = read(joinpath(@__DIR__, "text", f * ".txt"), String)
+    txt = replace(read(joinpath(@__DIR__, "text", f * ".txt"), String), "\r\n" => "\n")
     if length(txt) < 100
         @test striprtf(rtf) == txt
     else
