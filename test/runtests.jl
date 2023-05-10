@@ -1,15 +1,16 @@
 using StripRTF
 using Test
 
-function testfile_matches(f::AbstractString)
+function do_testfile(f::AbstractString)
+    @info "TEST FILE \"$f\""
     rtf = read(joinpath(@__DIR__, "rtf", f * ".rtf"), String)
     txt = read(joinpath(@__DIR__, "text", f * ".txt"), String)
-    stripped = striprtf(rtf)
-    @info "TEST FILE \"$f\""
-    if length(txt) < 40 && stripped != txt
-        @warn " -- EXPECTED \"$(escape_string(txt))\" BUT GOT \"$(escape_string(stripped))\""
+    if length(txt) < 100
+        @test striprtf(rtf) == txt
+    else
+        ok = striprtf(rtf) == txt
+        @test ok # omit long output on failures
     end
-    return stripped == txt
 end
 
 @testset "test files" begin
@@ -38,6 +39,6 @@ end
                 "simple_table",
                 "test_line_breaks_google_docs",
                 "unicode" ]
-        @test testfile_matches(f)
+        do_testfile(f)
     end
 end
