@@ -104,6 +104,7 @@ function _striprtf(out::IO, text::String)
     encoder = out
     for match in eachmatch(PATTERN, text)
         word, arg, hex, char, brace, tchar = match.captures
+        hex === nothing && encoder !== out && flush(encoder) # convert codepage bytes to UTF-8
         if brace !== nothing
             curskip = 0
             if brace == "{"
@@ -125,9 +126,9 @@ function _striprtf(out::IO, text::String)
             curskip = 0
             ch = only(char)
             if ch == '~'
-                !ignorable && (flush(encoder); print(out, '\ua0'))
+                !ignorable && print(out, '\ua0')
             elseif ch in "{}\\\n\r"
-                !ignorable && (flush(encoder); print(out, char))
+                !ignorable && print(out, char)
             elseif ch == '*'
                 ignorable = true
             end
@@ -143,7 +144,7 @@ function _striprtf(out::IO, text::String)
             elseif ignorable
                 nothing
             elseif word in keys(specialchars)
-                flush(encoder); print(out, specialchars[word])
+                print(out, specialchars[word])
             elseif word == "uc"
                 ucskip = parse(Int, arg)
             elseif word == "u"
@@ -151,7 +152,7 @@ function _striprtf(out::IO, text::String)
                 if arg !== nothing
                     c = parse(Int, arg)
                     c < 0 && (c += 0x10000)
-                    flush(encoder); print(out, Char(c))
+                    print(out, Char(c))
                 end
                 curskip = ucskip
             end
@@ -166,7 +167,7 @@ function _striprtf(out::IO, text::String)
             if curskip > 0
                 curskip -= 1
             elseif !ignorable
-                flush(encoder); print(out, tchar)
+                print(out, tchar)
             end
         end
     end
