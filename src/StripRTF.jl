@@ -75,6 +75,14 @@ const specialchars = Dict{String,String}([
     "row" => "\n",
     "cell" => "|",
     "nestcell" => "|",
+    "~" => "\u00a0",
+    "\n" => "\n",
+    "\r" => "\r",
+    "{" => "{",
+    "}" => "}",
+    "\\" => "\\",
+    "-" => "\u00ad",
+    "_" => "\u2011",
 ])
 
 const PATTERN = r"\\([a-z]{1,32})(-?\d{1,10})?[ ]?|\\'([0-9a-f]{2})|\\([^a-z])|([{}])|[\r\n]+|(.)"i
@@ -124,12 +132,9 @@ function _striprtf(out::IO, text::String)
             end
         elseif char !== nothing # \x (not a letter)
             curskip = 0
-            ch = only(char)
-            if ch == '~'
-                !ignorable && print(out, '\ua0')
-            elseif ch in "{}\\\n\r"
-                !ignorable && print(out, char)
-            elseif ch == '*'
+            if char in keys(specialchars)
+                !ignorable && print(out, specialchars[char])
+            elseif char == "*"
                 ignorable = true
             end
         elseif word !== nothing # \foo

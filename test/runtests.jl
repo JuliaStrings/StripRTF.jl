@@ -37,14 +37,9 @@ end
                 "nutridoc",
                 "sample_3",
                 "simple_table",
+                "specialchars",
                 "test_line_breaks_google_docs",
                 "unicode" ]
         do_testfile(f)
     end
-end
-
-@testset "other tests" begin
-    # non-breaking space
-    rtf = raw"{\rtf1\ansi{This is some {\b bold} text with non\~breaking\~spaces.\par}}"
-    @test striprtf(rtf) == "This is some bold text with non\u00a0breaking\u00a0spaces.\n"
 end
