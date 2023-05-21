@@ -43,3 +43,7 @@ end
         do_testfile(f)
     end
 end
+
+@testset "invalid chars" begin
+    @test striprtf(raw"{\rtf1\ansi\ansicpg0 T\'e4st}") == "T\xe4st" # invalid bytes preserved
+end
