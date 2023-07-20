@@ -22,6 +22,7 @@ end
                 "encoding",
                 "french",
                 "hello",
+                "hyperlink",
                 "hyperlinks",
                 "issue_11",
                 "issue_15",
